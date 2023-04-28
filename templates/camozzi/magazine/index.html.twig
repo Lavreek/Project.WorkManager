@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Camozzi Magazine{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 100vw;
+            min-height: 100vh;
+        }
+    </style>
+    <div class="container" style="margin-top: 1em;">
+        <div class="d-flex justify-content-end">
+            {{ form_start(search) }}
+            {{ form_end(search) }}
+        </div>
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"><a class="sort" data-sorting="id">#</a></th>
+                <th scope="col"><a class="sort" data-sorting="CodeSAP">Код SAP</a></th>
+                <th scope="col"><a class="sort" data-sorting="Code">Код</a></th>
+                <th scope="col"><a class="sort" data-sorting="Description">Описание</a></th>
+                <th scope="col"><a class="sort" data-sorting="MinStakePackage">Мин. кол./упаковка</a></th>
+                <th scope="col"><a class="sort" data-sorting="Warehouse">На складе</a></th>
+                <th scope="col"><a class="sort" data-sorting="NextDelivery">Следующая поставка</a></th>
+                <th scope="col"><a class="sort" data-sorting="PriceWithoutNDS">Цена без НДС</a></th>
+                <th scope="col"><a class="sort" data-sorting="NDS">НДС</a></th>
+                <th scope="col"><a class="sort" data-sorting="PriceWithNDS">Цена с НДС</a></th>
+                <th scope="col"><p class="sort" data-sorting="Updated">Был обновлён</p></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in magazine %}
+                <tr class="product-row">
+                    <td scope="row"><p>{{ product.getId() }}</p></td>
+                    <td><p>{{ product.getCodeSAP() }}</p></td>
+                    <td><p>{{ product.getCode() }}</p></td>
+                    <td><p>{{ product.getDescription() }}</p></td>
+                    <td><p>{{ product.getMinStakePackage() }}</p></td>
+                    <td><p>{{ product.getWarehouse() }}</p></td>
+                    <td><p>{{ product.getNextDelivery() }}</p></td>
+                    <td><p>{{ product.getPriceWithoutNDS() }}</p></td>
+                    <td><p>{{ product.getNDS() }}</p></td>
+                    <td><p>{{ product.getPriceWithNDS() }}</p></td>
+                    <td><p>{{ product.getUpdated().format('Y-m-d H:i:s') }}</p></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% set pagecount = (getMagazineCount() / 25)|number_format(0, '', '') - 1 %}
+    {% if page is not defined %}
+        {% set page = 1 %}
+    {% endif %}
+    {% if page > 3 %}
+        {% set start_page = page - 2 %}
+    {% else %}
+        {% set start_page = 1 %}
+    {% endif %}
+    {% if pagecount > 0 %}
+    <nav aria-label="Пример навигации по страницам">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page < 2 %} disabled {% endif %}">
+                <a class="page-link page" href="1">Начало</a>
+            </li>
+            <li class="page-item {% if page < 2 %} disabled {% endif %}">
+                <a class="page-link page" href="{% if page > 1 %} {{ page - 1 }} {% else %} {{ page }} {% endif %}">Предыдущая</a>
+            </li>
+
+
+            {% for i in start_page..pagecount %}
+                {% if loop.index <= 5 %}
+                    <li class="page-item"><a class="page-link page {% if i == page %} active {% endif %}" href="{{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li class="page-item {% if (page + 1) > pagecount %} disabled {% endif %}">
+                <a class="page-link page" href="{% if (page + 1) > pagecount %} {{ pagecount }} {% else %} {{ page + 1 }} {% endif %}">Следующая</a>
+            </li>
+            <li class="page-item {% if (page + 1) > pagecount %} disabled {% endif %}">
+                <a class="page-link page" href="{{ pagecount }}">Конец</a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+{% endblock %}
