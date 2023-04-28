@@ -49,7 +49,7 @@ class ApiMagazineController extends AbstractController
                 $product->setUpdated(new \DateTime(date('Y-m-d H:i:s', strtotime('+3 hours'))));
                 $magazine->save($product, true);
             }
-            return new JsonResponse(['message' => 'Добавлены и обновлены данные в магазине.']);
+            return new JsonResponse(['message' => 'Добавлены и обновлены данные в магазине.', 'status' => 200]);
         }
 
         return new JsonResponse(['message' => 'Не существует атрибута attachments.']);
