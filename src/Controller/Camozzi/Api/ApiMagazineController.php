@@ -11,8 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiMagazineController extends AbstractController
 {
-    #[Route('/api/camozzi/magazine/flush', name: 'api_camozzi_magazine', methods: ['POST'])]
-    public function flushData(Request $request, ManagerRegistry $registry): JsonResponse
+    #[Route('/api/camozzi/magazine/flush', name: 'api_camozzi_magazine_flush', methods: ['POST'])]
+    public function magazineFlush(Request $request, ManagerRegistry $registry): JsonResponse
     {
         $data = $request->request->all();
 
@@ -26,7 +26,8 @@ class ApiMagazineController extends AbstractController
                     continue;
                 }
 
-                $product = $magazine->findOneBy(['CodeSAP' => $attachment['cell matnr']]);
+                // $product = $magazine->findOneBy(['CodeSAP' => $attachment['cell matnr']]);
+                $product = null;
 
                 $attach = $this->getParameter('attach');
                 file_put_contents($attach, json_encode($attachment));
@@ -52,6 +53,6 @@ class ApiMagazineController extends AbstractController
             return new JsonResponse(['message' => 'Добавлены и обновлены данные в магазине.', 'status' => 200]);
         }
 
-        return new JsonResponse(['message' => 'Не существует атрибута attachments.']);
+        return new JsonResponse(['message' => 'Недостаточно необходимых параметров.']);
     }
 }

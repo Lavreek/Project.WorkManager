@@ -1,6 +1,7 @@
 ###> ###
 .env
 .idea
+/public/majorinvoice
 ###< ###
 
 ###> symfony/framework-bundle ###
