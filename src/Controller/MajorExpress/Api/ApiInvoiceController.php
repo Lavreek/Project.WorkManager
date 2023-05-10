@@ -65,7 +65,7 @@ class ApiInvoiceController extends AbstractController
                 try {
                     foreach ([$majorResourceRepo, $majorCodeRepo] as $dir) {
                         if (!is_dir($dir)) {
-                            mkdir($dir, 777);
+                            mkdir($dir);
                         }
                     }
 
