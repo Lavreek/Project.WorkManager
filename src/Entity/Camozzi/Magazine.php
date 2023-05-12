@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MagazineRepository::class)]
+#[ORM\Index(columns: ['code_sap'], name: 'idx_code_sap')]
 class Magazine
 {
     #[ORM\Id]
@@ -14,7 +15,8 @@ class Magazine
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
+
     private ?string $CodeSAP = null;
 
     #[ORM\Column(length: 255, nullable: true)]

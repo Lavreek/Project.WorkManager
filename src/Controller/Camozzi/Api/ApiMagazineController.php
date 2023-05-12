@@ -15,13 +15,14 @@ class ApiMagazineController extends AbstractController
     #[Route('/api/camozzi/magazine/flush', name: 'api_camozzi_magazine_flush', methods: ['POST'])]
     public function magazineFlush(Request $request, ManagerRegistry $registry): JsonResponse
     {
-        $data = $request->request->all();
+        $requestData = $request->request->all();
 
-        if (isset($data['attachments'])) {
+        if ($attachments = json_decode($requestData['attachments'], true)) {
             /** @var MagazineRepository $magazine */
             $magazine = $registry->getRepository(Magazine::class);
 
-            foreach ($data['attachments'] as $attachment) {
+
+            foreach ($attachments as $attachment) {
                 if (count($attachment) != 9) {
                     $lowAttach = $this->getParameter('low_attach');
                     file_put_contents($lowAttach, json_encode($attachment)."\n\n", FILE_APPEND);

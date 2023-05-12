@@ -16,11 +16,9 @@ class MagazineController extends AbstractController
     #[Route('/camozzi/magazine', name: 'app_camozzi_magazine')]
     public function magazine(ManagerRegistry $registry, Request $request): Response
     {
-        $where = [];
-        $orderBy = [];
+        $where = $orderBy = $twigOptions = [];
         $limit = 25;
         $offset = 0;
-        $twigOptions = [];
 
         $search = $this->createForm(SearchType::class);
         $search->handleRequest($request);
@@ -29,10 +27,12 @@ class MagazineController extends AbstractController
             $formData = $search->getData();
             $where = [$formData['attribute'] => $formData['search']];
         }
+
         if ($sorting = $request->query->get('sorting')) {
             [$attribute, $condition] = explode("=", $sorting,2);
             $orderBy = [$attribute => $condition];
         }
+
         if ($page = $request->query->get('page')) {
             [$page] = explode("=", $page, 1);
             if ($page < 2) {
@@ -49,7 +49,7 @@ class MagazineController extends AbstractController
             where: $where, orderBy: $orderBy, limit: $limit, offset: $offset
         );
 
-        return $this->render('camozzi/magazine/index.html.twig', $twigOptions += [
+        return $this->render('camozzi/magazine/index.html.twig', $twigOptions + [
             'search' => $search->createView(),
             'magazine' => $magazine,
         ]);
