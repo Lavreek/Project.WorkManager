@@ -17,7 +17,7 @@ class ApiMagazineController extends AbstractController
     {
         $requestData = $request->request->all();
 
-        if ($attachments = json_decode($requestData['attachments'], true)) {
+        if ($attachments = $requestData['attachments']) {
             /** @var MagazineRepository $magazine */
             $magazine = $registry->getRepository(Magazine::class);
 
