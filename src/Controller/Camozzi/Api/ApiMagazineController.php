@@ -3,6 +3,7 @@
 namespace App\Controller\Camozzi\Api;
 
 use App\Entity\Camozzi\Magazine;
+use App\Repository\Camozzi\MagazineRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +18,7 @@ class ApiMagazineController extends AbstractController
         $data = $request->request->all();
 
         if (isset($data['attachments'])) {
+            /** @var MagazineRepository $magazine */
             $magazine = $registry->getRepository(Magazine::class);
 
             foreach ($data['attachments'] as $attachment) {
@@ -27,27 +29,27 @@ class ApiMagazineController extends AbstractController
                 }
 
                 // $product = $magazine->findOneBy(['CodeSAP' => $attachment['cell matnr']]);
-                $product = null;
 
                 $attach = $this->getParameter('attach');
                 file_put_contents($attach, json_encode($attachment));
 
-                if (is_null($product)) {
+                // if (is_null($product)) {
                     /** @var Magazine $product */
                     $product = new Magazine();
 
                     $product->setCodeSAP($attachment['cell matnr']);
-                    $product->setCode($attachment['cell nn'] ?: '');
-                    $product->setDescription($attachment['cell descr'] ?: '');
-                }
+                    $product->setCode($attachment['cell nn']);
+                    $product->setDescription($attachment['cell descr']);
+                // }
 
-                $product->setMinStakePackage($attachment['cell pack'] ?: '');
-                $product->setWarehouse($attachment['cell stock qty'] ?: '');
-                $product->setNextDelivery($attachment['cell stock expect'] ?: '');
-                $product->setPriceWithoutNDS($attachment['cell rub'] ?: '');
-                $product->setNDS($attachment['cell nds'] ?: '');
-                $product->setPriceWithNDS($attachment['cell rub_nds'] ?: '');
+                $product->setMinStakePackage($attachment['cell pack']);
+                $product->setWarehouse($attachment['cell stock qty']);
+                $product->setNextDelivery($attachment['cell stock expect']);
+                $product->setPriceWithoutNDS($attachment['cell rub']);
+                $product->setNDS($attachment['cell nds']);
+                $product->setPriceWithNDS($attachment['cell rub_nds']);
                 $product->setUpdated(new \DateTime(date('Y-m-d H:i:s', strtotime('+3 hours'))));
+
                 $magazine->save($product, true);
             }
             return new JsonResponse(['message' => 'Добавлены и обновлены данные в магазине.', 'status' => 200]);
