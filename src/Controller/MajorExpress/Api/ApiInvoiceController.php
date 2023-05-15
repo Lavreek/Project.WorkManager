@@ -23,7 +23,7 @@ class ApiInvoiceController extends AbstractController
         return "";
     }
 
-    #[Route('/api/majorexpress/invoice/everything', name: 'api_majorexpress_invoice_get', methods: ['POST'])]
+    #[Route('/api/majorexpress/invoice/everything', name: 'api_majorexpress_invoice_everything', methods: ['POST'])]
     public function invoiceEverything(Request $request): JsonResponse
     {
         if ($_ENV['APP_SECRET'] !== $request->request->get('APP_SECRET')) {
