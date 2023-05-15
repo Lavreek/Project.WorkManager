@@ -38,8 +38,9 @@ class ApiInvoiceController extends AbstractController
                                 $filepath = $majorRepository . "/". $code . "/$option-";
                                 return new JsonResponse([
                                     'major_express' => [
-                                        'photo_info' => file_get_contents($filepath . "info.png"),
-                                        'photo_history' => file_get_contents($filepath . "history.png"),
+                                        'encode_type' => 'base64',
+                                        'photo_info' => base64_encode(file_get_contents($filepath . "info.png")),
+                                        'photo_history' => base64_encode(file_get_contents($filepath . "history.png")),
                                     ],
                                 ]);
                             }
