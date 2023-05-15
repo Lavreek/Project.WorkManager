@@ -14,8 +14,48 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiInvoiceController extends AbstractController
 {
+    private function getFileContent(string $filepath) : string
+    {
+        if (file_exists($filepath)) {
+            return file_get_contents($filepath);
+        }
+
+        return "";
+    }
+
+    #[Route('/api/majorexpress/invoice/everything', name: 'api_majorexpress_invoice_get', methods: ['POST'])]
+    public function invoiceEverything(Request $request): JsonResponse
+    {
+        if ($_ENV['APP_SECRET'] !== $request->request->get('APP_SECRET')) {
+            return new JsonResponse(['error' => 'Запрос по данному адресу недоступен.']);
+        }
+
+        $requestData = $request->request->all();
+
+        if (isset($requestData['type'], $requestData['code'])) {
+            if (['type' => $type, 'code' => $code] = $requestData) {
+                if ($type == 'json') {
+                    $majorRepository = $this->getParameter('major_invoice');
+
+                    $options = ['Сборные грузы', 'Экспресс-доставка'];
+                    $files = [];
+
+                    foreach ($options as $option) {
+                        $files += [$option => $this->getFileContent($majorRepository . "/" . $code . "/" . $option . "-unity.$type")];
+                    }
+
+                    return new JsonResponse([
+                        'major_express' => $files,
+                    ]);
+                }
+            }
+        }
+
+        return new JsonResponse(['error' => 'Недостаточно необходимых параметров.']);
+    }
+
     #[Route('/api/majorexpress/invoice/get', name: 'api_majorexpress_invoice_get', methods: ['POST'])]
-    public function invoiceGet(Request $request, ManagerRegistry $registry): JsonResponse
+    public function invoiceGet(Request $request): JsonResponse
     {
         if ($_ENV['APP_SECRET'] !== $request->request->get('APP_SECRET')) {
             return new JsonResponse(['error' => 'Запрос по данному адресу недоступен.']);
