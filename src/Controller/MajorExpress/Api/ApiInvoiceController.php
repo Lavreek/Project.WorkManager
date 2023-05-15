@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiInvoiceController extends AbstractController
 {
-    private function getFileContent(string $filepath) : string
+    private function getFileContent(string $filepath) : array
     {
         if (file_exists($filepath)) {
             return json_decode(file_get_contents($filepath), true);
         }
 
-        return "";
+        return [];
     }
 
     #[Route('/api/majorexpress/invoice/everything', name: 'api_majorexpress_invoice_everything', methods: ['POST'])]
