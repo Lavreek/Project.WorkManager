@@ -45,6 +45,10 @@ class ApiQueueController extends AbstractController
         $requestData = $request->request->all();
 
         if ($code = $requestData['code']) {
+            if (count(explode(",", $code)) > 1) {
+                $code = explode(",", $code);
+            }
+
             if (is_array($code)) {
                 foreach ($code as $cod) {
                     $this->pushCodeInQueue($registry, $cod);
