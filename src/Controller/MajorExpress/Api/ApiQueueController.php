@@ -12,6 +12,29 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiQueueController extends AbstractController
 {
+    private function pushCodeInQueue(ManagerRegistry $registry, string $code)
+    {
+        /** @var CodeQueueRepository $queueRepo */
+        $queueRepo = $registry->getRepository(CodeQueue::class);
+
+        $queue = $queueRepo->findOneBy(['Code' => $code]);
+
+        if (!is_null($queue)) {
+            return ['message' => 'Код уже существует.'];
+        }
+
+        $queue = new CodeQueue();
+        $queue->setCode($code);
+        $queue->setStatus(1);
+        $queue->setRequestCount(0);
+        $queue->setCreated(new \DateTime(date('Y-m-d H:i:s')));
+        // $queue->setUpdated(new \DateTime(date('Y-m-d H:i:s')));
+
+        $queueRepo->save($queue, true);
+
+        return ['message' => 'Код добавлен в очередь.'];
+    }
+
     #[Route('/api/majorexpress/queue/create', name: 'api_majorexpress_queue_create')]
     public function queueCreate(Request $request, ManagerRegistry $registry): JsonResponse
     {
@@ -19,26 +42,18 @@ class ApiQueueController extends AbstractController
             return new JsonResponse(['error' => 'Запрос по данному адресу недоступен.']);
         }
 
-        if ($code = $request->request->get('code')) {
-            /** @var CodeQueueRepository $queueRepo */
-            $queueRepo = $registry->getRepository(CodeQueue::class);
+        $requestData = $request->request->all();
 
-            $queue = $queueRepo->findOneBy(['Code' => $code]);
+        if ($code = $requestData['code']) {
+            if (is_array($code)) {
+                foreach ($code as $cod) {
+                    $this->pushCodeInQueue($registry, $cod);
+                }
+                return new JsonResponse(['message' => 'Список кодов был обновлён.']);
 
-            if (!is_null($queue)) {
-                return new JsonResponse(['message' => 'Код уже существует.']);
+            } else {
+                return new JsonResponse($this->pushCodeInQueue($registry, $code));
             }
-
-            $queue = new CodeQueue();
-            $queue->setCode($code);
-            $queue->setStatus(1);
-            $queue->setRequestCount(0);
-            $queue->setCreated(new \DateTime(date('Y-m-d H:i:s')));
-            // $queue->setUpdated(new \DateTime(date('Y-m-d H:i:s')));
-
-            $queueRepo->save($queue, true);
-
-            return new JsonResponse(['message' => 'Код добавлен в очередь.']);
         }
 
         return new JsonResponse(['error' => 'Недостаточно необходимых параметров.']);
