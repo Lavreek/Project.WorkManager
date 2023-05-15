@@ -21,7 +21,6 @@ class ApiMagazineController extends AbstractController
             /** @var MagazineRepository $magazine */
             $magazine = $registry->getRepository(Magazine::class);
 
-
             foreach ($attachments as $attachment) {
                 if (count($attachment) != 9) {
                     $lowAttach = $this->getParameter('low_attach');
@@ -29,27 +28,22 @@ class ApiMagazineController extends AbstractController
                     continue;
                 }
 
-                // $product = $magazine->findOneBy(['CodeSAP' => $attachment['cell matnr']]);
-
                 $attach = $this->getParameter('attach');
                 file_put_contents($attach, json_encode($attachment));
 
-                // if (is_null($product)) {
-                    /** @var Magazine $product */
-                    $product = new Magazine();
+                /** @var Magazine $product */
+                $product = new Magazine();
 
-                    $product->setCodeSAP($attachment['cell matnr']);
-                    $product->setCode($attachment['cell nn']);
-                    $product->setDescription($attachment['cell descr']);
-                // }
-
+                $product->setCodeSAP($attachment['cell matnr']);
+                $product->setCode($attachment['cell nn']);
+                $product->setDescription($attachment['cell descr']);
                 $product->setMinStakePackage($attachment['cell pack']);
                 $product->setWarehouse($attachment['cell stock qty']);
                 $product->setNextDelivery($attachment['cell stock expect']);
                 $product->setPriceWithoutNDS($attachment['cell rub']);
                 $product->setNDS($attachment['cell nds']);
                 $product->setPriceWithNDS($attachment['cell rub_nds']);
-                $product->setUpdated(new \DateTime(date('Y-m-d H:i:s', strtotime('+3 hours'))));
+                $product->setUpdated(new \DateTime(date('Y-m-d H:i:s', strtotime('+1 hours'))));
 
                 $magazine->save($product, true);
             }

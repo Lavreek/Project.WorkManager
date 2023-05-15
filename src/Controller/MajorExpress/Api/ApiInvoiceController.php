@@ -23,19 +23,36 @@ class ApiInvoiceController extends AbstractController
 
         $requestData = $request->request->all();
 
-        if (['type' => $type, 'code' => $code] = $requestData) {
-            $majorRepository = $this->getParameter('major_invoice');
+        if (isset($requestData['type'], $requestData['code'], $requestData['option'])) {
+            if (['type' => $type, 'code' => $code, 'option' => $option] = $requestData) {
+                $majorRepository = $this->getParameter('major_invoice');
 
-            if (isset($requestData['full']) and $requestData['full'] and $type === "json") {
-                $file = $majorRepository . "/" . $code . "/unity.json";
+                if (isset($requestData['full'])) {
+                    if ($requestData['full']) {
+                        switch ($type) {
+                            case 'json' : {
+                                $file = $majorRepository . "/" . $code . "/$option-unity.json";
+                                return $this->json(json_decode(file_get_contents($file), true));
+                            }
+                            case 'png' : {
+                                $filepath = $majorRepository . "/". $code . "/$option-";
+                                return new JsonResponse(['attachments' => [
+                                        'photo_info' => file_get_contents($filepath . "info-screen.png"),
+                                        'photo_history' => file_get_contents($filepath . "history-screen.png"),
+                                    ],
+                                ]);
+                            }
+                        }
+                    }
+                }
 
-                return $this->json(json_decode(file_get_contents($file), true));
-            }
+                if (isset($requestData['block'])) {
+                    $block = $requestData['block'];
 
-            if (['option' => $option, 'block' => $block] = $requestData) {
-                if (array_search($type, ['json', 'png']) !== false) {
-                    $file = $majorRepository . "/" . $code . "/$option-$block.$type";
-                    return $this->json(json_decode(file_get_contents($file), true));
+                    if (in_array($type, ['json', 'png'])) {
+                        $file = $majorRepository . "/" . $code . "/$option-$block.$type";
+                        return $this->json(json_decode(file_get_contents($file), true));
+                    }
                 }
             }
         }
