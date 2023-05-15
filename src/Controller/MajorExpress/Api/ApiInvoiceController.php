@@ -17,7 +17,7 @@ class ApiInvoiceController extends AbstractController
     private function getFileContent(string $filepath) : string
     {
         if (file_exists($filepath)) {
-            return file_get_contents($filepath);
+            return json_decode(file_get_contents($filepath), true);
         }
 
         return "";
