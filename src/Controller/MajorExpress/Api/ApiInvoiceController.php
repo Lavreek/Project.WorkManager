@@ -36,9 +36,10 @@ class ApiInvoiceController extends AbstractController
                             }
                             case 'png' : {
                                 $filepath = $majorRepository . "/". $code . "/$option-";
-                                return new JsonResponse(['attachments' => [
-                                        'photo_info' => file_get_contents($filepath . "info-screen.png"),
-                                        'photo_history' => file_get_contents($filepath . "history-screen.png"),
+                                return new JsonResponse([
+                                    'major_express' => [
+                                        'photo_info' => file_get_contents($filepath . "info.png"),
+                                        'photo_history' => file_get_contents($filepath . "history.png"),
                                     ],
                                 ]);
                             }
