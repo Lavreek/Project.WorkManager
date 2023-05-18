@@ -25,9 +25,6 @@ class FeedbackController extends AbstractController
     #[Route('/webinar/feedback/form/{boundary}', name: 'app_webinar_feedback_form')]
     public function getForm(string $boundary, Request $request, ManagerRegistry $registry): Response
     {
-        $formSamplesPath = $this->getParameter('feedback_form');
-        $sample = new File($formSamplesPath . "/" . $boundary);
-
         /** @var FeedbackRepository $feedbackRepo */
         $feedbackRepo = $registry->getRepository(Feedback::class);
 
@@ -39,6 +36,9 @@ class FeedbackController extends AbstractController
                 return $this->render('webinar/feedback/completed.html.twig');
             }
         }
+
+        $formSamplesPath = $this->getParameter('feedback_form');
+        $sample = new File($formSamplesPath . "/" . $boundary);
 
         $form = $this->createForm(FeedbackType::class);
         $form->handleRequest($request);
