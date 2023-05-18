@@ -59,6 +59,8 @@ class FeedbackController extends AbstractController
                 $feedbackRepo->save($feedback, true);
 
                 unlink($formSamplesPath . "/" . $boundary);
+
+                return $this->render('webinar/feedback/completed.html.twig');
             }
         }
 
