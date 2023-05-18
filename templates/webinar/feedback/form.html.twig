@@ -11,8 +11,8 @@
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", frameReady);
-        let frameForm = document.getElementsByName('feedback')[0];
-        let height = 'scrollHeight: ' + frameForm.scrollHeight + ' offsetHeight: ' + frameForm.offsetHeight + ' clientHeight: ' + frameForm.clientHeight;
+        let frameHtml = document.getElementsByTagName('html')[0];
+        let height = 'scrollHeight=' + frameHtml.scrollHeight + '&offsetHeight=' + frameHtml.offsetHeight + '&clientHeight=' + frameHtml.clientHeight;
         console.log(height);
 
         function frameReady() {
