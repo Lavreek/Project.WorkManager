@@ -48,8 +48,8 @@ class FeedbackController extends AbstractController
             $task = $form->getData();
 
             if (!is_null($feedback)) {
-                file_put_contents($formSamplesPath . "/emails.log", $task->getEmailHash());
-                $feedback->setEmailHash(md5($task->getEmailHash()));
+                file_put_contents($formSamplesPath . "/emails.log", $task['EmailHash']);
+                $feedback->setEmailHash(md5($task['EmailHash']));
 
                 $requsetData = $request->request->all();
                 unset($requsetData['feedback']);
