@@ -9,17 +9,16 @@
         {{ form_end(feedback) }}
     </div>
 
-    {% block javascripts %}
-        {{ parent() }}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", frameReady);
+        let frameForm = document.getElementsByName('feedback')[0];
 
-        <script type="text/javascript">
-            let frameForm = document.getElementsByName('feedback')[0]
-
+        function frameReady() {
             window.parent.postMessage({
                 'func': 'parentFunc',
                 'message': frameForm.scrollHeight
             }, "*");
-        </script>
-    {% endblock %}
+        }
+    </script>
 
 {% endblock %}
