@@ -8,10 +8,18 @@
         {{ form_row(feedback.send) }}
         {{ form_end(feedback) }}
     </div>
-    <script type="text/javascript">
-        window.parent.postMessage({
-            'func': 'parentFunc',
-            'message': 'Message text from iframe.'
-        }, "*");
-    </script>
+
+    {% block javascripts %}
+        {{ parent() }}
+
+        <script type="text/javascript">
+            let frameForm = document.getElementsByName('feedback')[0]
+
+            window.parent.postMessage({
+                'func': 'parentFunc',
+                'message': frameForm.scrollHeight
+            }, "*");
+        </script>
+    {% endblock %}
+
 {% endblock %}
