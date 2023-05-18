@@ -10,12 +10,8 @@
     </div>
     <script type="text/javascript">
         window.parent.postMessage({
-            'func': 'getHeight',
-            'message': 'test'
+            'func': 'parentFunc',
+            'message': 'Message text from iframe.'
         }, "*");
-
-        function getHeight(message) {
-            return "test";
-        }
     </script>
 {% endblock %}
