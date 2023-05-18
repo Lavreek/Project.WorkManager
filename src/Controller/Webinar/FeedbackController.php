@@ -28,18 +28,38 @@ class FeedbackController extends AbstractController
         $formSamplesPath = $this->getParameter('feedback_form');
         $sample = new File($formSamplesPath . "/" . $boundary);
 
+        /** @var FeedbackRepository $feedbackRepo */
+        $feedbackRepo = $registry->getRepository(Feedback::class);
+
+        /** @var Feedback $feedback */
+        $feedback = $feedbackRepo->findOneBy(['Boundary' => $boundary]);
+
+        if (!is_null($feedback)) {
+            if ($feedback->getStatus() == "Complete") {
+                return $this->render('webinar/feedback/completed.html.twig');
+            }
+        }
+
         $form = $this->createForm(FeedbackType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() and $form->isValid()) {
+            /** @var Feedback $task */
             $task = $form->getData();
-            dd($task, $request->request->all());
-            /** @var FeedbackRepository $feedbackRepo */
-            $feedbackRepo = $registry->getRepository(Feedback::class);
 
-//            $feedback = $feedbackRepo->findOneBy(['Boundary' => $boundary]);
+            if (!is_null($feedback)) {
+                file_put_contents($formSamplesPath . "/emails.log", $task->getEmailHash());
+                $feedback->setEmailHash(md5($task->getEmailHash()));
 
-//            $feedback->set
+                $requsetData = $request->request->all();
+                unset($requsetData['feedback']);
+
+                $feedback->setFormParams(json_encode($requsetData));
+                $feedback->setStatus('Complete');
+                $feedbackRepo->save($feedback, true);
+
+                unlink($formSamplesPath . "/" . $boundary);
+            }
         }
 
         return $this->render('webinar/feedback/form.html.twig', [
