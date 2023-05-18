@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="p-1">
+        {{ form_start(feedback) }}
+        {{ form_row(feedback.EmailHash) }}
+        {{ sample|raw }}
+        {{ form_row(feedback.send) }}
+        {{ form_end(feedback) }}
+    </div>
+{% endblock %}

@@ -3,7 +3,7 @@
 namespace App\Controller\Camozzi;
 
 use App\Entity\Camozzi\Magazine;
-use App\Form\SearchType;
+use App\Form\Camozzi\SearchType;
 use App\Repository\Camozzi\MagazineRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
