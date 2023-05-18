@@ -33,7 +33,7 @@ class FeedbackController extends AbstractController
 
         if ($form->isSubmitted() and $form->isValid()) {
             $task = $form->getData();
-            dd($task);
+            dd($task, $request->request->all());
             /** @var FeedbackRepository $feedbackRepo */
             $feedbackRepo = $registry->getRepository(Feedback::class);
 

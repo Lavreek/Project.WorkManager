@@ -1,0 +1,32 @@
+<iframe frameborder="0" height="0" name="feedbackFrame" src="https://manager.fluid-line.ru/webinar/feedback/form/boundary">
+    Your browser does not support inline frames.
+</iframe>
+
+<script>
+    if (window.addEventListener) {
+        window.addEventListener("message", onMessage, false);
+    }
+    else if (window.attachEvent) {
+        window.attachEvent("onmessage", onMessage, false);
+    }
+
+    function onMessage(event) {
+        // Check sender origin to be trusted
+        if (event.origin !== "https://manager.fluid-line.ru") return;
+
+        var data = event.data;
+
+        if (typeof(window[data.func]) == "function") {
+            window[data.func].call(null, data.message);
+        }
+    }
+
+    // Function to be called from iframe
+    function setFrameHeight(message) {
+        console.log(message);
+        let params = message.split('&');
+
+        let feedbackFrame = document.getElementsByName('feedbackFrame')[0];
+        feedbackFrame.style.height = params[0].split('=')[1] + 'px';
+    }
+</script>
