@@ -16,7 +16,9 @@
         function frameReady() {
             window.parent.postMessage({
                 'func': 'setFrameHeight',
-                'height': frameForm.scrollHeight
+                'scrollHeight': frameForm.scrollHeight,
+                'offsetHeight': frameForm.offsetHeight;
+                'clientHeight': frameForm.clientHeight;
             }, "*");
         }
     </script>
