@@ -15,8 +15,8 @@
 
         function frameReady() {
             window.parent.postMessage({
-                'func': 'parentFunc',
-                'message': html.clientHeight
+                'func': 'setFrameHeight',
+                'height': html.offsetHeight
             }, "*");
         }
     </script>
