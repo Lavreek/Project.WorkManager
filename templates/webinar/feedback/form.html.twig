@@ -11,12 +11,12 @@
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", frameReady);
-        let html = document.getElementsByTagName('html')[0];
+        let frameForm = document.getElementsByName('feedback')[0];
 
         function frameReady() {
             window.parent.postMessage({
                 'func': 'setFrameHeight',
-                'height': html.clientHeight
+                'height': frameForm.scrollHeight
             }, "*");
         }
     </script>
