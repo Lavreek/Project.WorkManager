@@ -1,0 +1,29 @@
+<div class="p-1">
+    {# feedback - Использование Form Builder #}
+    {{ form_start(feedback) }}
+    {{ form_row(feedback.EmailHash) }}
+
+    {# sample - Использование Form Builder #}
+    {{ sample|raw }}
+
+    {{ form_row(feedback.send) }}
+    {{ form_end(feedback) }}
+</div>
+
+<script type="text/javascript">
+    // Передача высоты при создании iframe. Выполняется при загрузки iframe, создание страницы
+
+    // Создание эвента
+    document.addEventListener("DOMContentLoaded", frameReady);
+    let frameHtml = document.getElementsByTagName('html')[0];
+    let height = 'scrollHeight=' + frameHtml.scrollHeight + '&offsetHeight=' + frameHtml.offsetHeight + '&clientHeight=' + frameHtml.clientHeight;
+    console.log(height);
+
+    // Регистрация функции в которую передаётся высота формы
+    function frameReady() {
+        window.parent.postMessage({
+            'func': 'setFrameHeight',
+            'message': height
+        }, "*");
+    }
+</script>

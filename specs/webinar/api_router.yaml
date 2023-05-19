@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Webinar Feedback
+  version: '1.0.1'
+  x-logo:
+    url: ''
+  description: Схема  работы  Webinar Feedback
+paths:
+  /webinar/feedback/form/{boundary}:
+    summary: Получение формы пользователя
+    description: iframe загрузка содержимого для отображения опроса.
+    trace:
+      tags: []
+    x-last-modified: 1684480565907
+    parameters:
+      - name: boundary
+        in: path
+        description: Генерируемый уникальный ключ пользователя
+        required: true
+        deprecated: false
+        example: "{\r\n\t\"boundary\" = \"uniqid()\"\r\n\t}"
+        x-last-modified: 1684480665118
+  /api/webinar/feedback/create/sample:
+    summary: Создание шаблона опроса
+    description: Создание шаблона представления для опроса
+    post:
+      tags: []
+    x-last-modified: 1684480944520
+    parameters:
+      - name: page_id
+        in: query
+        description: Номер страницы
+        required: true
+        deprecated: false
+        allowEmptyValue: false
+        x-last-modified: 1684481125662
+      - name: boundary
+        in: query
+        description: Уникальный ключ пользователя
+        required: true
+        deprecated: false
+        example: "{\r\n\t\"boundary\" = \"uniqid()\"\r\n\t}"
+        allowEmptyValue: false
+        x-last-modified: 1684481120517
+      - name: content
+        in: query
+        description: HTML контент содержащий дополнительные поля формы.
+        required: true
+        deprecated: false
+        allowEmptyValue: false
+        x-last-modified: 1684481120517
+      - name: roistat_id
+        in: query
+        required: true
+        deprecated: false
+        allowEmptyValue: true
+        x-last-modified: 1684481156067
+      - name: visitor_info
+        in: query
+        required: true
+        deprecated: false
+        allowEmptyValue: true
+        x-last-modified: 1684481178977
+      - name: fingerprint
+        in: query
+        required: true
+        deprecated: false
+        allowEmptyValue: true
+        x-last-modified: 1684481209286
+      - name: yan_uid
+        in: query
+        required: true
+        deprecated: false
+        allowEmptyValue: true
+        x-last-modified: 1684481230187
+      - name: uip
+        in: query
+        required: true
+        deprecated: false
+        allowEmptyValue: true
+        x-last-modified: 1684481241201
+components:
+  securitySchemes: {}
+  schemas: {}
+  headers: {}
+  responses: {}
+  parameters: {}
+tags: []
+servers:
+  - url: https://example.com
+    description: ''
+    variables: {}
+    x-last-modified: 1684480090324
+security: []

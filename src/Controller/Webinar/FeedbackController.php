@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Exception;
+use Throwable;
+
 class FeedbackController extends AbstractController
 {
     #[Route('/webinar/feedback', name: 'app_webinar_feedback')]
@@ -25,6 +28,10 @@ class FeedbackController extends AbstractController
     #[Route('/webinar/feedback/form/{boundary}', name: 'app_webinar_feedback_form')]
     public function getForm(string $boundary, Request $request, ManagerRegistry $registry): Response
     {
+        if (empty($boundary)) {
+            return $this->render('webinar/feedback/failed.html.twig');
+        }
+
         /** @var FeedbackRepository $feedbackRepo */
         $feedbackRepo = $registry->getRepository(Feedback::class);
 
@@ -38,7 +45,13 @@ class FeedbackController extends AbstractController
         }
 
         $formSamplesPath = $this->getParameter('feedback_form');
-        $sample = new File($formSamplesPath . "/" . $boundary);
+        try {
+            $sample = new File($formSamplesPath . "/" . $boundary);
+        } catch (Exception | Throwable $e) {
+            return $this->render('webinar/feedback/failed.html.twig', [
+                'error_message' => $e->getMessage()
+            ]);
+        }
 
         $form = $this->createForm(FeedbackType::class);
         $form->handleRequest($request);
