@@ -20,7 +20,8 @@ class FeedbackType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'e@mail.ru'
+                    'placeholder' => 'e@mail.ru',
+                    'autocomplete' => 'off',
                 ],
                 'row_attr' => [
                     'class' => 'mb-3'

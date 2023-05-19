@@ -51,15 +51,17 @@ curl_close($ch);
 ?>
 
 <!-- Загрузка формы для пользователя -->
-<iframe frameborder="0" width="600" height="0" name="feedbackFrame" src="https://example.com/webinar/feedback/form/<?= $boundary; ?>">
+<iframe frameborder="0" width="600" height="0" id="feedbackFrame" name="feedbackFrame" src="https://example.com/webinar/feedback/form/<?= $boundary; ?>">
     Your browser does not support inline frames.
 </iframe>
 
 <script>
+    let getMeTo = document.getElementById("feedbackFrame");
+    getMeTo.scrollIntoView({behavior: 'smooth'}, true);
+
     if (window.addEventListener) {
         window.addEventListener("message", onMessage, false);
-    }
-    else if (window.attachEvent) {
+    } else if (window.attachEvent) {
         window.attachEvent("onmessage", onMessage, false);
     }
 
@@ -76,10 +78,18 @@ curl_close($ch);
 
     // Function to be called from iframe
     function setFrameHeight(message) {
-        console.log(message);
         let params = message.split('&');
 
         let feedbackFrame = document.getElementsByName('feedbackFrame')[0];
-        feedbackFrame.style.height = params[0].split('=')[1] + 'px';
+        let height = params[0].split('=')[1];
+
+        setTimeout(() => {
+            feedbackFrame.style.height = height + 'px';
+        }, height - 10);
+
+        feedbackFrame.animate(
+            { height: height + 'px' },
+            height
+        );
     }
 </script>

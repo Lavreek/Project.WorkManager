@@ -25,8 +25,14 @@ class FeedbackController extends AbstractController
         ]);
     }
 
-    #[Route('/webinar/feedback/form/{boundary}', name: 'app_webinar_feedback_form')]
+    #[Route('/webinar/feedback/form/', name: 'app_webinar_feedback_form')]
     public function getForm(string $boundary, Request $request, ManagerRegistry $registry): Response
+    {
+        return $this->redirectToRoute('app_webinar_feedback_form_boundary');
+    }
+
+    #[Route('/webinar/feedback/form/{boundary}', name: 'app_webinar_feedback_form_boundary')]
+    public function getFormByBoundary(string $boundary, Request $request, ManagerRegistry $registry): Response
     {
         if (empty($boundary)) {
             return $this->render('webinar/feedback/failed.html.twig');

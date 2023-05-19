@@ -5,14 +5,13 @@
         <h4 class="alert-heading">Опрос пройден!</h4>
         <p>Спасибо за прохождение опроса.</p>
         <hr>
-        <p class="mb-0" style="font-size: 12px;">Если вы ошиблись или указали неверные данные, вы можете обратиться к нам по адресу: <a id="visiterEmail" href="mailto:mail@fluid-line.ru" class="vidPut_mailto">mail@fluid-line.ru</a>.</p>
+        <p class="mb-0" style="font-size: 12px;">Если вы ошиблись или указали неверные данные, вы можете обратиться к нам по адресу: <a href="mailto:mail@fluid-line.ru">mail@fluid-line.ru</a>.</p>
     </div>
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", frameReady);
         let frameHtml = document.getElementsByTagName('html')[0];
         let height = 'scrollHeight=' + frameHtml.scrollHeight + '&offsetHeight=' + frameHtml.offsetHeight + '&clientHeight=' + frameHtml.clientHeight;
-        console.log(height);
 
         function frameReady() {
             window.parent.postMessage({
