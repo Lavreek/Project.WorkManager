@@ -28,16 +28,12 @@ class FeedbackController extends AbstractController
     #[Route('/webinar/feedback/form/', name: 'app_webinar_feedback_form')]
     public function getForm(string $boundary, Request $request, ManagerRegistry $registry): Response
     {
-        return $this->redirectToRoute('app_webinar_feedback_form_boundary', ['boundary' => ""]);
+        return $this->redirectToRoute('app_webinar_feedback_form_boundary', ['boundary' => "empty"]);
     }
 
     #[Route('/webinar/feedback/form/{boundary}', name: 'app_webinar_feedback_form_boundary')]
     public function getFormByBoundary(string $boundary, Request $request, ManagerRegistry $registry): Response
     {
-        if (empty($boundary)) {
-            return $this->render('webinar/feedback/failed.html.twig');
-        }
-
         /** @var FeedbackRepository $feedbackRepo */
         $feedbackRepo = $registry->getRepository(Feedback::class);
 
@@ -51,6 +47,7 @@ class FeedbackController extends AbstractController
         }
 
         $formSamplesPath = $this->getParameter('feedback_form');
+
         try {
             $sample = new File($formSamplesPath . "/" . $boundary);
         } catch (Exception | Throwable $e) {
