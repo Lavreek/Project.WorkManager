@@ -110,6 +110,6 @@ class ApiQueueController extends AbstractController
             return new JsonResponse(['code' => $queue->getCode()]);
         }
 
-        return new JsonResponse(['nessage' => 'Код для обновления отсутствует.']);
+        return new JsonResponse(['message' => 'Код для обновления отсутствует.']);
     }
 }
