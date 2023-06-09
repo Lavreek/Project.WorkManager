@@ -78,9 +78,31 @@ class ApiQueueController extends AbstractController
         $date = date('Y-m-d H:i:s');
         $nextDate = date('Y-m-d H:i:s', strtotime('+1 day'));
 
+        /** @var CodeQueue $queue */
         $queue = $queueRepo->findByDate(new \DateTime($date));
 
         if (!is_null($queue)) {
+            $code = $queue->getCode();
+            $majorRepository = $this->getParameter('major_invoice');
+
+            $files = scandir($majorRepository . "/" . $code);
+
+            foreach ($files as $file) {
+                if (preg_match('#history#u', $file)) {
+                    $fileinfo = pathinfo($file);
+                    if (in_array($fileinfo['extension'], ['json'])) {
+                        $history = json_decode(file_get_contents($majorRepository . "/" . $code . "/" . $file),true);
+                        $lastRecord = end($history);
+
+                        if ($lastRecord[0] === "Груз доставлен получателю") {
+                            $queue->setStatus(0);
+                            $queueRepo->save($queue, true);
+                            return new JsonResponse(['nessage' => 'Код для обновления отсутствует.']);
+                        }
+                    }
+                }
+            }
+
             $queue->setRequestCount($queue->getRequestCount() + 1);
             $queue->setUpdated(new \DateTime($nextDate));
             $queueRepo->save($queue, true);
