@@ -97,7 +97,7 @@ class ApiQueueController extends AbstractController
                         if ($lastRecord[0] === "Груз доставлен получателю") {
                             $queue->setStatus(0);
                             $queueRepo->save($queue, true);
-                            return new JsonResponse(['nessage' => 'Код для обновления отсутствует.']);
+                            return new JsonResponse(['message' => 'Код доставки был обновлён, повторите попытку.']);
                         }
                     }
                 }
