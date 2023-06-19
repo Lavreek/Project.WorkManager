@@ -50,7 +50,7 @@ class ApiFeedbackController extends AbstractController
                 mkdir($formSamplePath);
             }
 
-            file_put_contents($formSamplePath . "/" . $feedback->getBoundary(), base64_decode($requestData['content']), FILE_APPEND);
+            file_put_contents($formSamplePath . "/" . $feedback->getBoundary(), base64_decode($requestData['content']) . "\n", FILE_APPEND);
         }
 
         return new JsonResponse(['status' => $feedback->getStatus()]);
