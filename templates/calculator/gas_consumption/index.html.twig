@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GasConsumptionController!{% endblock %}
+
+{% block body %}
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); max-width: 600px; column-gap: 30px;">
+        <div>
+            {{ form_start(calculator) }}
+            {{ form_end(calculator) }}
+        </div>
+        <div>
+            <h5>Результат:</h5>
+            {{ result }}
+        </div>
+    </div>
+
+{% endblock %}
